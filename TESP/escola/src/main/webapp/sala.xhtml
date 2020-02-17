@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:panelGroup id="cadastro">
+			<h:form id="cad" rendered="#{not empty salamb.sala}">
+				<rich:panel>
+					<h:outputText value="Cadastro de Salas"
+						style="font-size:15px;font-weight:bold" />
+					<rich:messages />
+					<h:panelGrid columns="3">
+						<h:outputLabel value="Codigo " />
+						<h:inputText id="codigo" value="#{salamb.sala.codigo}" size="10" />
+						<h:message for="codigo" errorClass="invalid" />
+						
+						<h:outputLabel value="Capacidade " />
+						<rich:inputNumberSpinner id="capacidade" minValue="0"
+							maxValue="100" value="#{salamb.sala.capacidade}" />
+						<h:message for="capacidade" errorClass="invalid" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2">
+						<h:outputLabel value="Possui Quadro Branco?" />
+						<h:selectBooleanCheckbox value="#{salamb.sala.possuiQuadroBranco}">
+						</h:selectBooleanCheckbox>
+
+						<h:outputLabel value="Possui DataShow?" />
+						<h:selectBooleanCheckbox value="#{salamb.sala.possuiDataShow}">
+						</h:selectBooleanCheckbox>
+
+						<h:outputLabel value="Possui Computador?" />
+						<h:selectBooleanCheckbox value="#{salamb.sala.possuiComputador}">
+						</h:selectBooleanCheckbox>
+
+						<h:outputLabel value="Observacao" />
+						<h:inputTextarea cols="60" rows="4"
+							value="#{salamb.sala.observacao}" />
+
+						<h:outputLabel value="Status?" />
+						<h:selectOneRadio required = "true" value="#{salamb.sala.status}">
+							<f:selectItem itemLabel="Ativo" itemValue="1" />
+							<f:selectItem itemLabel="Em manutencao" itemValue="2" />
+							<f:selectItem itemLabel="Desativado" itemValue="3" />
+						</h:selectOneRadio>
+
+						<h:outputLabel value="Data de Termino Manutencao" />
+						<rich:calendar id="dataTerminoManutencao"
+							value="#{salamb.sala.dataTerminoManutencao}" size="10"
+							popup="true" datePattern="d/M/yy" />
+						<h:message for="dataTerminoManutencao" errorClass="invalid" />
+					</h:panelGrid>
+					<h:commandButton id="gravar" action="#{salamb.gravar}"
+						value="Gravar" />
+					<h:commandButton id="cancelar" action="#{salamb.cancelar}"
+						value="Cancelar" immediate="true" />
+				</rich:panel>
+			</h:form>
+		</h:panelGroup>
+
+		<rich:panel rendered="#{empty salamb.sala}">
+			<h:outputText value="Lista de Salas"
+				style="font-size:15px;font-weight:bold" />
+			<h:form id="arg">
+				<h:outputLabel value="Capacidade" />
+				<h:inputText id="capacidade" value="#{salamb.capacidadeArg}" />
+				<h:commandButton id="pesquisar" action="#{salamb.pesquisar}"
+					value="Pesquisar" render="tabela" />
+				<h:commandButton id="novo" action="#{salamb.novo}" value="Novo"
+					render="cadastro" />
+			</h:form>
+			<h:panelGroup rendered="#{empty salamb.salas}">
+				<h:outputText value="Nenhuma sala existente" />
+			</h:panelGroup>
+			<h:form id="edt">
+				<rich:dataTable id="tabela" var="sala" value="#{salamb.salas}"
+					rendered="#{not empty salamb.salas}"
+					onrowclick="selectRow('#{sala.id}')">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Id " />
+						</f:facet>
+						<h:outputText value="#{sala.id}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Codigo " />
+						</f:facet>
+						<h:outputText value="#{sala.codigo}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Capacidade " />
+						</f:facet>
+						<h:outputText value="#{sala.capacidade}" />
+					</rich:column>
+
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Possui Quadro Branco? " />
+						</f:facet>
+						<h:outputText value="#{sala.quadroToString(possuiQuadroBranco)}"/>
+						
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Possui DataShow? " />
+						</f:facet>
+						<h:outputText value="#{sala.dataToString(possuiDataShow)}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Possui Computador? " />
+						</f:facet>
+						<h:outputText value="#{sala.pcToString(possuiComputador)}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Status " />
+						</f:facet>
+						<h:outputText value="#{sala.statusToString(status)}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Data de Termino da Manutencao " />
+						</f:facet>
+						<h:outputText value="#{sala.terminoToString(dataTerminoManutencao)}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Comandos " />
+						</f:facet>
+						<h:commandLink id="editar" action="#{salamb.editar}"
+							value="Editar">
+							<f:setPropertyActionListener target="#{salamb.id}"
+								value="#{sala.id}" />
+						</h:commandLink>
+						<h:outputText value=" " />						
+						
+						<h:commandLink id="excluir" value="Excluir" render="tabela">
+							<rich:componentControl target="popupExclusao" operation="show" />
+						</h:commandLink>
+						<rich:popupPanel id="popupExclusao" modal="true" autosized="true"
+							resizeable="false" domElementAttachment="form">
+							<f:facet name="header">
+								<h:outputText value="Janela de confirmação" />
+							</f:facet>
+							<f:facet name="controls">
+								<h:outputLink value="#"
+									onclick="#{rich:component('popupConf')}.hide(); return false;">X</h:outputLink>
+							</f:facet>
+							<p>Confirma a exclusão da sala #{sala.codigo}?</p>
+							<center>
+								<h:commandButton value="Sim" action="#{salamb.excluir}">
+									<f:setPropertyActionListener target="#{salamb.id}"
+										value="#{sala.id}" />
+								</h:commandButton>
+								<h:outputLabel value=" " />
+								<h:commandButton value="Não"
+									onclick="#{rich:component('popupConf')}.hide(); return false;" />
+							</center>
+						</rich:popupPanel>
+						
+					</rich:column>
+				</rich:dataTable>
+			</h:form>
+		</rich:panel>
+	</ui:define>
+</ui:composition>

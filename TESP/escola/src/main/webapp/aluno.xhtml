@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:panelGroup id="cadastro">
+			<h:form id="cad" rendered="#{not empty alunomb.aluno}">
+				<rich:panel>
+					<h:outputText value="Cadastro de Alunos"
+						style="font-size:15px;font-weight:bold" />
+					<rich:messages />
+					<h:panelGrid columns="4">
+						<h:outputLabel value="Nome " />
+						<h:inputText id="nome" value="#{alunomb.aluno.nome}" size="50" />
+						<h:message for="nome" errorClass="invalid" />
+						<h:outputLabel value=""/>
+						<h:outputLabel value="CPF " />
+						<h:inputText id="cpf" value="#{alunomb.aluno.cpf}" size="14" />
+						<rich:jQuery selector="#cpf" timing="domready" query="mask('999.999.999-99',{placeholder:' '})" />
+						<h:message for="cpf" errorClass="invalid" />
+						<h:outputLabel value="Matrícula " />
+						<h:inputText id="matricula" value="#{alunomb.aluno.matricula}"
+							size="10" />
+						<h:message for="matricula" errorClass="invalid" />
+						<h:outputLabel value=" " />
+						<h:outputLabel value="Data de Aniversário " />
+						<h:inputText id="dataAniversario" value="#{alunomb.aluno.dataAniversario}"
+							size="10" />
+						<rich:jQuery selector="#dataAniversario" timing="domready" query="mask('99/99/9999',{placeholder:'dd/mm/aaaa '})" />
+						<h:message for="dataAniversario" errorClass="invalid" />
+					</h:panelGrid>
+					<h:commandButton id="gravar" action="#{alunomb.gravar}"
+						value="Gravar" />
+					<h:commandButton id="cancelar" action="#{alunomb.cancelar}"
+						value="Cancelar" immediate="true" />
+				</rich:panel>
+			</h:form>
+		</h:panelGroup>
+		<rich:panel rendered="#{empty alunomb.aluno}">
+			<h:outputText value="Lista de Alunos"
+				style="font-size:15px;font-weight:bold" />
+			<h:form id="arg">
+				<h:outputLabel value="Nome:" />
+				<h:inputText id="nomeArg" value="#{alunomb.nomeArg}" />
+				<h:commandButton id="pesquisar" action="#{alunomb.pesquisar}"
+					value="Pesquisar" render="tabela" />
+				<h:commandButton id="novo" action="#{alunomb.novo}" value="Novo"
+					render="cadastro" />
+			</h:form>
+			<h:panelGroup rendered="#{empty alunomb.alunos}">
+				<h:outputText value="Nenhum aluno existe" />
+			</h:panelGroup>
+			<h:form id="edt">
+				<rich:dataTable id="tabela" var="aluno" value="#{alunomb.alunos}"
+					rendered="#{not empty alunomb.alunos}"
+					onrowclick="selectRow('#{aluno.id}')">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Id " />
+						</f:facet>
+						<h:outputText value="#{aluno.id}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Nome " />
+						</f:facet>
+						<h:outputText value="#{aluno.nome}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="CPF " />
+						</f:facet>
+						<h:outputText id="cpf" value="#{aluno.cpf}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Matricula " />
+						</f:facet>
+						<h:outputText value="#{aluno.matricula}" />
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Data Aniversário " />
+						</f:facet>
+						<h:outputText value="#{aluno.dataAniversario}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Comandos " />
+						</f:facet>
+						<h:commandLink id="editar" action="#{alunomb.editar}"
+							value="Editar">
+							<f:setPropertyActionListener target="#{alunomb.id}"
+								value="#{aluno.id}" />
+						</h:commandLink>
+						<h:outputText value=" " />
+
+						<h:commandLink id="excluir" value="Excluir" render="tabela">
+							<rich:componentControl target="popupExclusao" operation="show" />
+						</h:commandLink>
+						<rich:popupPanel id="popupExclusao" modal="true" autosized="true"
+							resizeable="false" domElementAttachment="form">
+							<f:facet name="header">
+								<h:outputText value="Janela de confirmação" />
+							</f:facet>
+							<f:facet name="controls">
+								<h:outputLink value="#"
+									onclick="#{rich:component('popupConf')}.hide(); return false;">X</h:outputLink>
+							</f:facet>
+							<p>Confirma a exclusão do aluno #{aluno.nome}?</p>
+							<center>
+								<h:commandButton value="Sim" action="#{alunomb.excluir}">
+									<f:setPropertyActionListener target="#{alunomb.id}"
+										value="#{aluno.id}" />
+								</h:commandButton>
+								<h:outputLabel value=" " />
+								<h:commandButton value="Não"
+									onclick="#{rich:component('popupConf')}.hide(); return false;" />
+							</center>
+						</rich:popupPanel>
+
+					</rich:column>
+				</rich:dataTable>
+			</h:form>
+		</rich:panel>
+	</ui:define>
+</ui:composition>

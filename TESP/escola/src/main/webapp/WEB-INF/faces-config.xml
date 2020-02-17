@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is not required if you don't need any extra configuration. -->
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+	<converter>
+		<converter-id>ConversorSala</converter-id>
+		<converter-class>br.unibh.escola.visao.ConversorSala</converter-class>
+	</converter>
+	<converter>
+		<converter-id>ConversorProfessor</converter-id>
+		<converter-class>br.unibh.escola.visao.ConversorProfessor</converter-class>
+	</converter>
+	<converter>
+		<converter-id>ConversorAluno</converter-id>
+		<converter-class>br.unibh.escola.visao.ConversorAluno</converter-class>
+	</converter>
+
+	<factory>
+		<exception-handler-factory>br.unibh.escola.visao.CustomExceptionHandlerFactory</exception-handler-factory>
+	</factory>
+</faces-config>

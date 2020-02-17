@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+
+
+<h:head>
+	<title>Java EE Escola</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<h:outputStylesheet name="css/screen.css" />
+	<h:outputScript library="js" name="jquery.maskedinput.min.js"
+		target="head" />
+</h:head>
+<h:body>
+	<div id="container">
+		<div id="content">
+			<rich:toolbar height="26px">
+				<rich:dropDownMenu label='Cadastros'>
+					<rich:menuItem label="Aluno"
+						onclick="document.location.href='aluno.jsf'" />
+					<rich:menuItem label="Professor"
+						onclick="document.location.href='professor.jsf'" />
+					<rich:menuItem label="Sala"
+						onclick="document.location.href='sala.jsf'" />
+					<rich:menuItem label="Disciplina"
+						onclick="document.location.href='disciplina.jsf'" />
+				</rich:dropDownMenu>
+				<h:form>
+					<rich:dropDownMenu label="Relatórios">
+						<rich:menuItem label="Aluno"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioAlunos','inline')}" />
+						<rich:menuItem label="Aluno (Save As)"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioAlunos','attach')}" />
+
+						<rich:menuItem label="Disciplina"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioDisciplinas','inline')}" />
+						<rich:menuItem label="Disciplina (Save As)"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioDisciplinas','attach')}" />
+
+						<rich:menuItem label="Professor"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioProfessores','inline')}" />
+						<rich:menuItem label="Professor (Save As)"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioProfessores','attach')}" />
+
+						<rich:menuItem label="Sala"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioSalas','inline')}" />
+						<rich:menuItem label="Sala (Save As)"
+							actionListener="#{relatoriosmb.geraRelatorio('RelatorioSalas','attach')}" />
+
+					</rich:dropDownMenu>
+				</h:form>
+			</rich:toolbar>
+			<ui:insert name="content">
+			</ui:insert>
+		</div>
+		<div id="footer">
+			<h:graphicImage value="/resources/gfx/logo.png" alt="Weld logo" />
+			<p>
+				SIT3AN/UNIBH- All rights reserved<br />
+			</p>
+		</div>
+	</div>
+</h:body>
+</html>
